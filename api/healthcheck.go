@@ -7,6 +7,6 @@ import "net/http"
 // method: GET
 // responses:
 //   200: OK
-func healthcheck(w http.ResponseWriter, r *http.Request) {
+func (s *Services) healthcheck(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
