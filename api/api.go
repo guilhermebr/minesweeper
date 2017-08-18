@@ -17,19 +17,19 @@ type Services struct {
 }
 
 func Start(log *logrus.Logger) error {
-
 	db := memory.New()
-
 	services := Services{
 		logger: log,
 		GameService: &minesweeper.GameService{
 			Store: memory.NewGameStore(db),
 		},
 	}
+
 	// API Routes
 	r := mux.NewRouter()
 	r.HandleFunc("/healthcheck", services.healthcheck).Methods("GET")
 	r.HandleFunc("/game", services.createGame).Methods("POST")
+	r.HandleFunc("/game/{name}/start", services.startGame).Methods("POST")
 
 	// Middleware
 	n := negroni.Classic()
@@ -37,6 +37,6 @@ func Start(log *logrus.Logger) error {
 
 	//Run Server
 	log.Infoln("Server running on port :3000")
-	http.ListenAndServe(":3000", n)
+	http.ListenAndServe("127.0.0.1:3000", n)
 	return nil
 }

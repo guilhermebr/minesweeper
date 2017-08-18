@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/guilhermebr/minesweeper/types"
 	"github.com/sirupsen/logrus"
 )
@@ -35,4 +36,27 @@ func (s *Services) createGame(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
+}
+
+// title: start game
+// path: /game/{name}/start
+// method: POST
+// responses:
+//   200: OK
+//   500: server error
+func (s *Services) startGame(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	name := vars["name"]
+
+	log := s.logger.WithFields(logrus.Fields{
+		"service": "game",
+		"method":  "start",
+	})
+
+	if err := s.GameService.Start(name); err != nil {
+		log.WithField("err", err).Error("cannot start game")
+		ErrInternalServer.Send(w)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
