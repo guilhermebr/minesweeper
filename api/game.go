@@ -30,12 +30,12 @@ func (s *Services) createGame(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := s.GameService.Create(game); err != nil {
+	if err := s.GameService.Create(&game); err != nil {
 		log.WithField("err", err).Error("cannot create game")
 		ErrInternalServer.Send(w)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
+	Success(game, http.StatusCreated).Send(w)
 }
 
 // title: start game
@@ -53,10 +53,12 @@ func (s *Services) startGame(w http.ResponseWriter, r *http.Request) {
 		"method":  "start",
 	})
 
-	if err := s.GameService.Start(name); err != nil {
+	game, err := s.GameService.Start(name)
+	if err != nil {
 		log.WithField("err", err).Error("cannot start game")
 		ErrInternalServer.Send(w)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+
+	Success(game, http.StatusOK).Send(w)
 }

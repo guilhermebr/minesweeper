@@ -1,29 +1,29 @@
 package types
 
 type Cell struct {
-	Mine    bool
-	Clicked bool
-	Value   int
+	Mine    bool `json:"mine"`
+	Clicked bool `json:"clicked"`
+	Value   int  `json:"value"`
 }
 
 type CellGrid []Cell
 
 type Game struct {
-	Name   string
-	Rows   int
-	Cols   int
-	Mines  int
-	Status string
-	Grid   []CellGrid
+	Name   string     `json:"name"`
+	Rows   int        `json:"rows"`
+	Cols   int        `json:"cols"`
+	Mines  int        `json:"mines"`
+	Status string     `json:"status"`
+	Grid   []CellGrid `json:"grid,omitempty"`
 }
 
 type GameService interface {
-	Create(game Game) error
-	Start(name string) error
+	Create(game *Game) error
+	Start(name string) (*Game, error)
 }
 
 type GameStore interface {
-	Insert(game Game) error
-	Update(game Game) error
-	GetByName(name string) (Game, error)
+	Insert(game *Game) error
+	Update(game *Game) error
+	GetByName(name string) (*Game, error)
 }

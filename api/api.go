@@ -26,10 +26,7 @@ func Start(log *logrus.Logger) error {
 	}
 
 	// API Routes
-	r := mux.NewRouter()
-	r.HandleFunc("/healthcheck", services.healthcheck).Methods("GET")
-	r.HandleFunc("/game", services.createGame).Methods("POST")
-	r.HandleFunc("/game/{name}/start", services.startGame).Methods("POST")
+	r := Router(&services)
 
 	// Middleware
 	n := negroni.Classic()
@@ -39,4 +36,13 @@ func Start(log *logrus.Logger) error {
 	log.Infoln("Server running on port :3000")
 	http.ListenAndServe("127.0.0.1:3000", n)
 	return nil
+}
+
+func Router(services *Services) *mux.Router {
+	// API Routes
+	r := mux.NewRouter()
+	r.HandleFunc("/healthcheck", services.healthcheck).Methods("GET")
+	r.HandleFunc("/game", services.createGame).Methods("POST")
+	r.HandleFunc("/game/{name}/start", services.startGame).Methods("POST")
+	return r
 }

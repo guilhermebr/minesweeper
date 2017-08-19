@@ -14,7 +14,7 @@ func NewGameStore(db *DB) *GameStore {
 	return &GameStore{db: db}
 }
 
-func (s *GameStore) Insert(game types.Game) error {
+func (s *GameStore) Insert(game *types.Game) error {
 	if _, ok := s.db.games[game.Name]; ok {
 		return errors.New("game already exist")
 	}
@@ -22,7 +22,7 @@ func (s *GameStore) Insert(game types.Game) error {
 	return nil
 }
 
-func (s *GameStore) Update(game types.Game) error {
+func (s *GameStore) Update(game *types.Game) error {
 	if _, ok := s.db.games[game.Name]; !ok {
 		return errors.New("game do not exist")
 	}
@@ -30,9 +30,9 @@ func (s *GameStore) Update(game types.Game) error {
 	return nil
 }
 
-func (s *GameStore) GetByName(name string) (types.Game, error) {
+func (s *GameStore) GetByName(name string) (*types.Game, error) {
 	if game, ok := s.db.games[name]; ok {
 		return game, nil
 	}
-	return types.Game{}, errors.New("game not found")
+	return nil, errors.New("game not found")
 }

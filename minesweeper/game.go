@@ -15,7 +15,7 @@ const (
 	max_cols = 30
 )
 
-func (s *GameService) Create(game types.Game) error {
+func (s *GameService) Create(game *types.Game) error {
 	if game.Name == "" {
 		return errors.New("no Game name")
 	}
@@ -45,15 +45,15 @@ func (s *GameService) Create(game types.Game) error {
 	return err
 }
 
-func (s *GameService) Start(name string) error {
+func (s *GameService) Start(name string) (*types.Game, error) {
 	game, err := s.Store.GetByName(name)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	buildBoard(&game)
+	buildBoard(game)
 
 	game.Status = "started"
 	err = s.Store.Update(game)
-	return err
+	return game, err
 }
