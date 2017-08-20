@@ -7,9 +7,11 @@ import (
 	"github.com/guilhermebr/minesweeper/types"
 )
 
-func buildBoard(game *types.Game) {
+func init() {
 	rand.Seed(time.Now().Unix())
+}
 
+func buildBoard(game *types.Game) {
 	numCells := game.Cols * game.Rows
 	cells := make(types.CellGrid, numCells)
 

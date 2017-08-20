@@ -11,8 +11,11 @@ type GameService struct {
 }
 
 const (
-	max_rows = 30
-	max_cols = 30
+	defaultRows  = 6
+	defaultCols  = 6
+	defaultMines = 12
+	maxRows      = 30
+	maxCols      = 30
 )
 
 func (s *GameService) Create(game *types.Game) error {
@@ -21,20 +24,20 @@ func (s *GameService) Create(game *types.Game) error {
 	}
 
 	if game.Rows == 0 {
-		game.Rows = 6
+		game.Rows = defaultRows
 	}
 	if game.Cols == 0 {
-		game.Cols = 6
+		game.Cols = defaultCols
 	}
 	if game.Mines == 0 {
-		game.Mines = 12
+		game.Mines = defaultMines
 	}
 
-	if game.Rows > max_rows {
-		game.Rows = max_rows
+	if game.Rows > maxRows {
+		game.Rows = maxRows
 	}
-	if game.Cols > max_cols {
-		game.Cols = max_cols
+	if game.Cols > maxCols {
+		game.Cols = maxCols
 	}
 	if game.Mines > (game.Cols * game.Rows) {
 		game.Mines = (game.Cols * game.Rows)
