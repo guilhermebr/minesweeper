@@ -2,6 +2,7 @@ package minesweeper
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/guilhermebr/minesweeper/types"
 )
@@ -58,6 +59,7 @@ func (s *GameService) Start(name string) (*types.Game, error) {
 
 	game.Status = "started"
 	err = s.Store.Update(game)
+	fmt.Printf("%#v\n", game.Grid)
 	return game, err
 }
 
