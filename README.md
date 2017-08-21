@@ -16,6 +16,12 @@ More about the game: https://en.wikipedia.org/wiki/Minesweeper_(video_game)
   $ ./build/minesweeper
 ```
 
+# Build and Run with Docker
+
+```
+  $ sh run-docker.sh
+```
+
 # Create a New Game
 
 ```
@@ -26,6 +32,12 @@ More about the game: https://en.wikipedia.org/wiki/Minesweeper_(video_game)
 
 ```
   $ curl -i -X POST '127.0.0.1:3000/game/teste/start'
+```
+
+## Play
+
+```
+  $ curl -i -X POST '127.0.0.1:3000/game/teste/click' -d '{"row": 1,"col":1}'
 ```
 
 # Run tests
