@@ -4,25 +4,25 @@ Go(lang) implementation of Minesweeper game API
 
 More about the game: https://en.wikipedia.org/wiki/Minesweeper_(video_game)
 
-# Build
+## Build
 
 ```
   $ go build -o build/minesweeper ./cmd
 ```
 
-# Run
+## Run
 
 ```
   $ ./build/minesweeper
 ```
 
-# Build and Run with Docker
+## Build and Run with Docker
 
 ```
   $ sh run-docker.sh
 ```
 
-# Create a New Game
+## Create a New Game
 
 ```
   $ curl -i -X POST '127.0.0.1:3000/game' -d '{"name": "teste", "rows": 10, "cols": 8, "mines": 20}'
@@ -40,7 +40,7 @@ More about the game: https://en.wikipedia.org/wiki/Minesweeper_(video_game)
   $ curl -i -X POST '127.0.0.1:3000/game/teste/click' -d '{"row": 1,"col":1}'
 ```
 
-# Run tests
+## Run tests
 
 ```
   $ go clean  $(go list ./... | grep -v /vendor/)
