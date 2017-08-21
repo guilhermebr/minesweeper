@@ -15,11 +15,13 @@ type Game struct {
 	Mines  int        `json:"mines"`
 	Status string     `json:"status"`
 	Grid   []CellGrid `json:"grid,omitempty"`
+	Clicks int        `json:"-"`
 }
 
 type GameService interface {
 	Create(game *Game) error
 	Start(name string) (*Game, error)
+	Click(name string, i, j int) (*Game, error)
 }
 
 type GameStore interface {

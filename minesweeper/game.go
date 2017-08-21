@@ -60,3 +60,20 @@ func (s *GameService) Start(name string) (*types.Game, error) {
 	err = s.Store.Update(game)
 	return game, err
 }
+
+func (s *GameService) Click(name string, i, j int) (*types.Game, error) {
+	game, err := s.Store.GetByName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := clickCell(game, i, j); err != nil {
+		return nil, err
+	}
+
+	if err := s.Store.Update(game); err != nil {
+		return nil, err
+	}
+
+	return game, nil
+}

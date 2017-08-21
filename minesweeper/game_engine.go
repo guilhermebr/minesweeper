@@ -1,6 +1,7 @@
 package minesweeper
 
 import (
+	"errors"
 	"math/rand"
 	"time"
 
@@ -55,4 +56,25 @@ func setAdjacentValues(game *types.Game, i, j int) {
 			game.Grid[z][w].Value++
 		}
 	}
+}
+
+func clickCell(game *types.Game, i, j int) error {
+	if game.Grid[i][j].Clicked {
+		return errors.New("cell already clicked")
+	}
+	game.Grid[i][j].Clicked = true
+	if game.Grid[i][j].Mine {
+		game.Status = "over"
+		return nil
+	}
+	game.Clicks += 1
+	if checkWon(game) {
+		game.Status = "won"
+	}
+
+	return nil
+}
+
+func checkWon(game *types.Game) bool {
+	return game.Clicks == ((game.Rows * game.Cols) - game.Mines)
 }

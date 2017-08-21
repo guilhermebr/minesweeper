@@ -140,3 +140,163 @@ func TestStartGame(t *testing.T) {
 		t.Errorf("unexpected grid. want=%v, got=%v", expected, game.Grid)
 	}
 }
+
+func TestClickCell(t *testing.T) {
+	s := GameService{
+		Store: &mocks.MockGameStore{
+			OnGetByName: func(name string) (*types.Game, error) {
+				grid := []types.CellGrid{
+					types.CellGrid{
+						types.Cell{Mine: false, Clicked: false, Value: 1},
+						types.Cell{Mine: true, Clicked: false, Value: 0},
+					},
+					types.CellGrid{
+						types.Cell{Mine: false, Clicked: false, Value: 1},
+						types.Cell{Mine: false, Clicked: false, Value: 1},
+					},
+				}
+				return &types.Game{
+					Name:   name,
+					Cols:   2,
+					Rows:   2,
+					Mines:  1,
+					Status: "started",
+					Grid:   grid,
+				}, nil
+			},
+			OnUpdate: func(game *types.Game) error {
+				return nil
+			},
+		},
+	}
+
+	game, err := s.Click("test", 0, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if game.Status != "started" {
+		t.Errorf("unexpected status. want='started', got %s", game.Status)
+	}
+
+	expected := []types.CellGrid{
+		types.CellGrid{
+			types.Cell{Mine: false, Clicked: true, Value: 1},
+			types.Cell{Mine: true, Clicked: false, Value: 0},
+		},
+		types.CellGrid{
+			types.Cell{Mine: false, Clicked: false, Value: 1},
+			types.Cell{Mine: false, Clicked: false, Value: 1},
+		},
+	}
+	if !reflect.DeepEqual(game.Grid, expected) {
+		t.Errorf("unexpected grid. want=%v, got=%v", expected, game.Grid)
+	}
+}
+
+func TestClickCell_MineCell(t *testing.T) {
+	s := GameService{
+		Store: &mocks.MockGameStore{
+			OnGetByName: func(name string) (*types.Game, error) {
+				grid := []types.CellGrid{
+					types.CellGrid{
+						types.Cell{Mine: false, Clicked: false, Value: 1},
+						types.Cell{Mine: true, Clicked: false, Value: 0},
+					},
+					types.CellGrid{
+						types.Cell{Mine: false, Clicked: false, Value: 1},
+						types.Cell{Mine: false, Clicked: false, Value: 1},
+					},
+				}
+				return &types.Game{
+					Name:   name,
+					Cols:   2,
+					Rows:   2,
+					Mines:  1,
+					Status: "started",
+					Grid:   grid,
+				}, nil
+			},
+			OnUpdate: func(game *types.Game) error {
+				return nil
+			},
+		},
+	}
+
+	game, err := s.Click("test", 0, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if game.Status != "over" {
+		t.Errorf("unexpected status. want='started', got %s", game.Status)
+	}
+
+	expected := []types.CellGrid{
+		types.CellGrid{
+			types.Cell{Mine: false, Clicked: false, Value: 1},
+			types.Cell{Mine: true, Clicked: true, Value: 0},
+		},
+		types.CellGrid{
+			types.Cell{Mine: false, Clicked: false, Value: 1},
+			types.Cell{Mine: false, Clicked: false, Value: 1},
+		},
+	}
+	if !reflect.DeepEqual(game.Grid, expected) {
+		t.Errorf("unexpected grid. want=%v, got=%v", expected, game.Grid)
+	}
+}
+
+func TestClickCell_Won(t *testing.T) {
+	s := GameService{
+		Store: &mocks.MockGameStore{
+			OnGetByName: func(name string) (*types.Game, error) {
+				grid := []types.CellGrid{
+					types.CellGrid{
+						types.Cell{Mine: false, Clicked: true, Value: 1},
+						types.Cell{Mine: true, Clicked: false, Value: 0},
+					},
+					types.CellGrid{
+						types.Cell{Mine: false, Clicked: true, Value: 1},
+						types.Cell{Mine: false, Clicked: false, Value: 1},
+					},
+				}
+				return &types.Game{
+					Name:   name,
+					Cols:   2,
+					Rows:   2,
+					Mines:  1,
+					Clicks: 2,
+					Status: "started",
+					Grid:   grid,
+				}, nil
+			},
+			OnUpdate: func(game *types.Game) error {
+				return nil
+			},
+		},
+	}
+
+	game, err := s.Click("test", 1, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if game.Status != "won" {
+		t.Errorf("unexpected status. want='won', got %s", game.Status)
+	}
+
+	expected := []types.CellGrid{
+		types.CellGrid{
+			types.Cell{Mine: false, Clicked: true, Value: 1},
+			types.Cell{Mine: true, Clicked: false, Value: 0},
+		},
+		types.CellGrid{
+			types.Cell{Mine: false, Clicked: true, Value: 1},
+			types.Cell{Mine: false, Clicked: true, Value: 1},
+		},
+	}
+	if !reflect.DeepEqual(game.Grid, expected) {
+		t.Errorf("unexpected grid. want=%v, got=%v", expected, game.Grid)
+	}
+}

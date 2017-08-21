@@ -44,5 +44,6 @@ func Router(services *Services) *mux.Router {
 	r.HandleFunc("/healthcheck", services.healthcheck).Methods("GET")
 	r.HandleFunc("/game", services.createGame).Methods("POST")
 	r.HandleFunc("/game/{name}/start", services.startGame).Methods("POST")
+	r.HandleFunc("/game/{name}/click", services.clickCell).Methods("POST")
 	return r
 }
